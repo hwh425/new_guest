@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'sign'
+    'sign',
+    'bootstrap3',
 ]
 
 MIDDLEWARE = [
@@ -75,12 +76,28 @@ WSGI_APPLICATION = 'new_guest.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# sqlite3
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# mysql 配置如下 驱动 主机地址 端口号 数据库名称 用户名账号及密码
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'HOST': '172.16.2.40',
+#         'PORT': '3306',
+#         'NAME': 'new_guest',
+#         'USER': 'root',
+#         'PASSWORD': '123456',
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#         },
+#     }
+# }
 
 
 # Password validation

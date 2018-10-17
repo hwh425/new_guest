@@ -15,16 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import re_path
 
 from sign import views as sign_views
 
 
 urlpatterns = [
+    re_path(r'^sign_index/(?P<eid>[0-9]+)/$', sign_views.sign_index, name='sign_index'),
+
     path('admin/', admin.site.urls),
     path('', sign_views.index),
     path('index/', sign_views.index),
 
     path('login_action/', sign_views.login_action),
     path('event_manage/', sign_views.event_manage),
+    path('guest_manage/', sign_views.guest_manage),
+    path('search_name/', sign_views.search_name),
+    path('search_name_guest/', sign_views.search_name_guest),
     path('accounts/login/', sign_views.index),
 ]

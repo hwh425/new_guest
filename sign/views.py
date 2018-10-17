@@ -1,7 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from sign.models import Event
+from sign.models import Guest
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
 # Create your views here.
 
 
@@ -88,6 +93,47 @@ def login_action(request):
 
 @login_required
 def event_manage(request):
-    # username = request.COOKIES.get('user', '')  # 读取浏览器cookie
+    event_list = Event.objects.all()
     username = request.session.get('user', '')  # 读取浏览器session
-    return render(request, "sign/event_manage.html", {"user": username})
+    return render(request, "sign/event_manage.html", {"user": username, "events": event_list})
+
+
+@login_required
+def search_name(request):
+    username = request.session.get('user', '')
+    search_name1 = request.GET.get("name", "")
+    event_list = Event.objects.filter(name__contains=search_name1)
+    return render(request, "sign/event_manage.html", {"user": username, "events": event_list})
+
+
+# 嘉宾管理
+@login_required
+def guest_manage(request):
+    username = request.session.get('user', '')  # 读取浏览器session
+    guest_list = Guest.objects.all()
+    paginator = Paginator(guest_list, 2)
+    page = request.GET.get('page')
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        # 如果page不是整数，取第一页面数据
+        contacts = paginator.page(1)
+    except EmptyPage:
+        # 如果page不在范围，取最后一面
+        contacts = paginator.page(paginator.num_pages)
+    return render(request, "sign/guest_manage.html", {"user": username, "guests": contacts})
+
+
+@login_required
+def search_name_guest(request):
+    username = request.session.get('user', '')
+    search_name2 = request.GET.get("phone", "")
+    guest_list = Guest.objects.filter(phone__contains=search_name2)
+    return render(request, "sign/guest_manage.html", {"user": username, "guests": guest_list})
+
+
+# 签到页面
+@login_required
+def sign_index(request, eid):
+    event = get_object_or_404(Event, id=eid)
+    return render(request, "sign/sign_index.html", {"event": event})
