@@ -22,6 +22,7 @@ from sign import views as sign_views
 
 urlpatterns = [
     re_path(r'^sign_index/(?P<eid>[0-9]+)/$', sign_views.sign_index, name='sign_index'),
+    re_path(r'^sign_index_action/(?P<eid>[0-9]+)/$', sign_views.sign_index_action, name='sign_index_action'),
 
     path('admin/', admin.site.urls),
     path('', sign_views.index),
@@ -33,4 +34,5 @@ urlpatterns = [
     path('search_name/', sign_views.search_name),
     path('search_name_guest/', sign_views.search_name_guest),
     path('accounts/login/', sign_views.index),
+    path('logout/', sign_views.logout),
 ]
