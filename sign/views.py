@@ -91,6 +91,7 @@ def login_action(request):
             return render(request, 'sign/index.html', {'error': 'username or password error!'})
 
 
+# 发布会管理（登录之后默认页面）
 @login_required
 def event_manage(request):
     event_list = Event.objects.all()
@@ -98,6 +99,7 @@ def event_manage(request):
     return render(request, "sign/event_manage.html", {"user": username, "events": event_list})
 
 
+# 发布会名称搜索
 @login_required
 def search_name(request):
     username = request.session.get('user', '')
@@ -111,6 +113,7 @@ def search_name(request):
 def guest_manage(request):
     username = request.session.get('user', '')  # 读取浏览器session
     guest_list = Guest.objects.all()
+
     paginator = Paginator(guest_list, 2)
     page = request.GET.get('page')
     try:
@@ -124,12 +127,28 @@ def guest_manage(request):
     return render(request, "sign/guest_manage.html", {"user": username, "guests": contacts})
 
 
+# 嘉宾手机号的查询
 @login_required
-def search_name_guest(request):
+def search_phone(request):
     username = request.session.get('user', '')
-    search_name2 = request.GET.get("phone", "")
-    guest_list = Guest.objects.filter(phone__contains=search_name2)
-    return render(request, "sign/guest_manage.html", {"user": username, "guests": guest_list})
+    search_phone1 = request.GET.get("phone", "")
+    guest_list = Guest.objects.filter(phone__contains=search_phone1)
+
+    # if len(guest_list) == 0:
+    #     return render(request, "sign/guest_manage.html", {"user": username, "hint": "根据输入的 `手机号码` 查询结果为空！"})
+
+    paginator = Paginator(guest_list, 2)
+    page = request.GET.get('page')
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        contacts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        contacts = paginator.page(paginator.num_pages)
+
+    return render(request, "sign/guest_manage.html", {"user": username, "guests": contacts, "phone": search_phone1})
 
 
 # 签到页面
@@ -155,7 +174,7 @@ def sign_index_action(request, eid):
 
     result = Guest.objects.get(phone=phone, event_id=eid)
     if result.sign:
-        return render(request, "sign/sign_index.html", {"event": event, 'hint': 'use has sign in.'})
+        return render(request, "sign/sign_index.html", {"event": event, 'hint': 'user has sign in.'})
     else:
         Guest.objects.filter(phone=phone, event_id=eid).update(sign='1')
         return render(request, "sign/sign_index.html", {"event": event, 'hint': 'sign in success!', 'guest': result})

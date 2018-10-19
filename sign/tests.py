@@ -119,12 +119,12 @@ class GuestManageTest(TestCase):
         self.assertIn(b"alen", response.content)
         self.assertIn(b"18611001100", response.content)
 
-    # def test_guest_mange_search_success(self):
-    #     ''' 测试嘉宾搜索 '''
-    #     response = self.client.post('/search_phone/',{"phone":"18611001100"})
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertIn(b"alen", response.content)
-    #     self.assertIn(b"18611001100", response.content)
+    def test_guest_mange_search_success(self):
+        ''' 测试嘉宾搜索 '''
+        response = self.client.post('/search_phone/',{"phone":"18611001100"})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"alen", response.content)
+        self.assertIn(b"18611001100", response.content)
 
 
 class SignIndexActionTest(TestCase):
@@ -151,11 +151,11 @@ class SignIndexActionTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"event id or phone error.", response.content)
 
-    # def test_sign_index_action_user_sign_has(self):
-    #     ''' 用户已签到 '''
-    #     response = self.client.post('/sign_index_action/2/', {"phone": "18611001101"})
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertIn(b"user has sign in.", response.content)
+    def test_sign_index_action_user_sign_has(self):
+        ''' 用户已签到 '''
+        response = self.client.post('/sign_index_action/2/', {"phone": "18611001101"})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"user has sign in.", response.content)
 
     def test_sign_index_action_sign_success(self):
         ''' 签到成功 '''

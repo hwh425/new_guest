@@ -32,7 +32,7 @@ urlpatterns = [
     path('event_manage/', sign_views.event_manage),
     path('guest_manage/', sign_views.guest_manage),
     path('search_name/', sign_views.search_name),
-    path('search_name_guest/', sign_views.search_name_guest),
+    path('search_phone/', sign_views.search_phone),
     path('accounts/login/', sign_views.index),
     path('logout/', sign_views.logout),
 ]

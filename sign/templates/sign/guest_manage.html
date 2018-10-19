@@ -30,7 +30,7 @@
     <!-- 发布会搜索菜单 -->
     <div class="page-header" style="padding-top: 60px;">
         <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form" method="get" action="/search_name_guest/">
+            <form class="navbar-form" method="get" action="/search_phone/">
                 <div class="form-group">
                     <input name="phone" type="text" placeholder="手机号" class="form-control">
                 </div>
@@ -45,7 +45,12 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>id</th><th>名称</th><th>手机</th><th>Email</th><th>签到</th><th>发布会</th>
+                    <th>id</th>
+                    <th>名称</th>
+                    <th>手机</th>
+                    <th>Email</th>
+                    <th>签到</th>
+                    <th>发布会</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -59,6 +64,7 @@
                     <td>{{ guest.event }}</td>
                 </tr>
                 {% endfor %}
+{#                {{ hint }}#}
                 </tbody>
             </table>
         </div>
@@ -68,13 +74,17 @@
     <div class="paginator">
         <span class="step-links">
             {% if guests.has_previous %}
-            <a href="?page={{ guests.previous_page_number }}">previous</a>
+            <a href="?phone={{ phone }}page={{ guests.previous_page_number }}">previous</a>
             {% endif %}
             <span class="current">
                 Page {{ guests.number }} of {{ guests.paginator.num_pages }}.
             </span>
         {% if guests.has_next %}
-        <a href="?page={{ guests.next_page_number }}">next</a>
+            {% if phone %}
+                <a href="?phone={{ phone }}&page={{ guests.next_page_number }}">next</a>
+            {% else %}
+                <a href="?page={{ guests.next_page_number }}">next</a>
+            {% endif %}
         {% endif %}
         </span>
     </div>
